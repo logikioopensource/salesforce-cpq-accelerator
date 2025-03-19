@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Quoting Request</label>
+    <pluralLabel>Quoting Requests</pluralLabel>
+    <nameField>
+        <label>Quoting Request Name</label>
+        <displayFormat>RFQ-{00000}</displayFormat>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <!-- Logik.ai Ids -->
+    <fields>
+        <fullName>ConfigurationId__c</fullName>
+        <label>Configuration Id</label>
+        <externalId>true</externalId>
+        <required>false</required>
+        <unique>false</unique>
+        <type>Text</type>
+        <length>255</length>
+        <description>The Logik.ai configuration's UUID. Used to look up Salesforce line items.</description>
+        <inlineHelpText>The Logik.ai configuration's UUID. Used to look up Salesforce line items.</inlineHelpText>
+    </fields>
+    <!-- Lookup Formula Fields -->
+    <!-- Custom Fields -->
+    <fields>
+        <fullName>Status__c</fullName>
+        <label>Status</label>
+        <externalId>false</externalId>
+        <required>false</required>
+        <unique>false</unique>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>false</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Pending</fullName>
+                    <default>true</default>
+                    <label>Pending</label>
+                </value>
+                <value>
+                    <fullName>Completed</fullName>
+                    <default>false</default>
+                    <label>Completed</label>
+                </value>
+                <value>
+                    <fullName>Failed</fullName>
+                    <default>false</default>
+                    <label>Failed</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <inlineHelpText>A status of Pending indicates the request is on hold because the Config Line Items were not found.</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>MatchingConfigurationLineItemSize__c</fullName>
+        <label>Matching Config Line Size</label>
+        <type>Number</type>
+        <precision>10</precision>
+        <scale>0</scale>
+        <description>This field is updated as Configuration Line Items are created, representing a total count of records with matching Configuration Ids. Only used if &quot;Expected Config Line Size&quot; has a value.</description>
+        <inlineHelpText>This field is updated as Configuration Line Items are created, representing a total count of records with matching Configuration Ids. Only used if &quot;Expected Config Line Size&quot; has a value.</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>AsyncJobId__c</fullName>
+        <label>Job Id (Async Only)</label>
+        <externalId>false</externalId>
+        <required>false</required>
+        <unique>true</unique>
+        <type>Text</type>
+        <length>18</length>
+        <description>The Id of Async Apex Job, if RFQ ran asynchronously. If &quot;Run Async?&quot; is true and this field is empty, it means there were not enough Configuration Lines found to satisfy the Minimum amount required.</description>
+        <inlineHelpText>The Id of Async Apex Job, if RFQ ran asynchronously. If &quot;Run Async?&quot; is true and this field is empty, it means there were not enough Configuration Lines found to satisfy the Minimum amount required.</inlineHelpText>
+    </fields>
+    <!-- Request Info -->
+    <fields>
+        <fullName>RequestPayload__c</fullName>
+        <label>Request Payload Map</label>
+        <type>LongTextArea</type>
+        <length>32768</length>
+        <visibleLines>5</visibleLines>
+        <description>JSON string of request fields sent to RFQ API. May contain additional fields added by RFQ itself.</description>
+    </fields>
+    <fields>
+        <fullName>ConfigurableProduct2Id__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Configurable Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Quoting Requests</relationshipLabel>
+        <relationshipName>QuotingRequests</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>RunAsynchronousApex__c</fullName>
+        <label>Run Async?</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+        <unique>false</unique>
+        <defaultValue>false</defaultValue>
+        <description>If set to true, RFQ will run as an asynchronous job.</description>
+        <inlineHelpText>If set to true, RFQ will run as an asynchronous job.</inlineHelpText>
+    </fields>
+    <fields>
+        <fullName>MinimumConfigurationLineItemSize__c</fullName>
+        <label>Minimum Config Line Size</label>
+        <type>Number</type>
+        <precision>10</precision>
+        <scale>0</scale>
+        <description>An optional request parameter. If set, RFQ won't resume until the value of &quot;Matching Config Line Records&quot; reaches this number.</description>
+        <inlineHelpText>An optional request parameter. If set, RFQ won't resume until the value of &quot;Matching Config Line Records&quot; reaches this number.</inlineHelpText>
+    </fields>
+    <!-- Response Info -->
+    <fields>
+        <fullName>ErrorResponse__c</fullName>
+        <label>Error Response</label>
+        <externalId>false</externalId>
+        <type>LongTextArea</type>
+        <length>32768</length>
+        <visibleLines>5</visibleLines>
+        <description>If RFQ fails, the error will be saved here. If RFQ ran asynchronously, the error is from the Async Apex Job. If RFQ ran synchronously, the error is from the RFQ response body.</description>
+    </fields>
+    <fields>
+        <fullName>CompletedDate__c</fullName>
+        <label>Completed Date</label>
+        <externalId>false</externalId>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>QuoteId__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Quote</label>
+        <referenceTo>SBQQ__Quote__c</referenceTo>
+        <relationshipLabel>Quoting Requests</relationshipLabel>
+        <relationshipName>QuotingRequests</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <!-- Debug -->
+    <sharingModel>ReadWrite</sharingModel>
+    <visibility>Public</visibility>
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Represents the status and other basic information of an RFQ request.</description>
+    <enableActivities>true</enableActivities>
+    <enableBulkApi>false</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>false</enableSharing>
+    <enableStreamingApi>false</enableStreamingApi>
+    <externalSharingModel>Private</externalSharingModel>
+    <searchLayouts></searchLayouts>
+</CustomObject>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <description>Takes Quoting Request as input. Pulls details from async apex job and updates similar fields like Status and Completed Date.</description>
+    <assignments>
+        <name>WriteError</name>
+        <label>Write Error</label>
+        <locationX>50</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>QuotingRequestRecord.ErrorResponse__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>GetJobs.ExtendedStatus</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>UpdateJobDetails</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>WriteJobDetails</name>
+        <label>Write Job Details</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>QuotingRequestRecord.CompletedDate__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>GetJobs.CompletedDate</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>QuotingRequestRecord.Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>GetJobs.Status</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>DidJobFail</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>DidJobFail</name>
+        <label>Did Job Fail?</label>
+        <locationX>182</locationX>
+        <locationY>350</locationY>
+        <defaultConnector>
+            <targetReference>UpdateJobDetails</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Job Succeeded</defaultConnectorLabel>
+        <rules>
+            <name>JobFailed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>GetJobs.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Failed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>WriteError</targetReference>
+            </connector>
+            <label>Job Failed</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Logik.ai Quoting Request Subflow {!$Flow.CurrentDateTime}</interviewLabel>
+    <isOverridable>true</isOverridable>
+    <label>Logik.ai Quoting Request Subflow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>GetJobs</name>
+        <label>Get Jobs</label>
+        <locationX>182</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>WriteJobDetails</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>QuotingRequestRecord.AsyncJobId__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>AsyncApexJob</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>UpdateJobDetails</name>
+        <label>Update Job Details</label>
+        <locationX>182</locationX>
+        <locationY>650</locationY>
+        <inputReference>QuotingRequestRecord</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>GetJobs</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>QuotingRequestRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>QuotingRequest__c</objectType>
+    </variables>
+</Flow>
