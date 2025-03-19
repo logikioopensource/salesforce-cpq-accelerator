@@ -1,0 +1,28 @@
+{
+    "sfdcLoginUrl": "https://login.salesforce.com",
+    "sourceApiVersion": "63.0",
+    "packageDirectories": [
+        {
+            "path": "src",
+            "versionNumber": "0.0.0.NEXT",
+            "package": "Logik.ai Open Source",
+            "releaseNotesUrl": "https://logiksupport.force.com",
+            "dependencies": [
+                {
+                    "package": "Salesforce CPQ@244.2"
+                },
+                {
+                    "package": "Logik.ai Base Managed Package@2.4.0.2"
+                },
+                {
+                    "package": "Logik.ai Extension for Salesforce CPQ@2.16.0.1"
+                }
+            ]
+        }
+    ],
+    "packageAliases": {
+        "Logik.ai Base Managed Package@2.4.0.2": "04t5e000000j9lDAAQ",
+        "Logik.ai Extension for Salesforce CPQ@2.16.0.1": "04t5e0000012JPKAA2",
+        "Salesforce CPQ@244.2": "04t4N000000on20QAA"
+    }
+}
